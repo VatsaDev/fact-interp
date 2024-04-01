@@ -321,6 +321,7 @@ class GPT(nn.Module):
             # apply softmax to convert logits to (normalized) probabilities
             #print(logits)
             probs = F.softmax(logits, dim=-1)
+            print("new_tok\n")
             print(probs)
             # sample from the distribution
             idx_next = torch.multinomial(probs, num_samples=1)
