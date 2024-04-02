@@ -77,10 +77,13 @@ class CausalSelfAttention(nn.Module):
         # output projection
         y = self.resid_dropout(self.c_proj(y))
         print("A",A.size(),"v",v.size())
+
+        # att map
         with open("att.txt","w") as f:
             A = np.asarray(list(A.tolist()))
             v = np.asarray(list(v.tolist()))
             f.write(A/v)
+            
         return y
 
 class MLP(nn.Module):
