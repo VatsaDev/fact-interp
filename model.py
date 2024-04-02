@@ -83,7 +83,8 @@ class CausalSelfAttention(nn.Module):
             A = np.asarray(list(A.tolist()))
             v = np.asarray(list(v.tolist()))
             M = A/v
-            f.write(str(list(M.tolist())))
+            f.write('')
+            M.tofile(f,",")
             
         return y
 
