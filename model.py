@@ -78,7 +78,7 @@ class CausalSelfAttention(nn.Module):
         y = self.resid_dropout(self.c_proj(y))
         print("A",A.size(),"v",v.size())
 
-        # att map
+        # att map, need to actually get the avg of the embedding per tok, then get the attention avg for the tok, then A/V
         with open("att.txt","w") as f:
             A = np.asarray(list(A.tolist()))
             v = np.asarray(list(v.tolist()))
