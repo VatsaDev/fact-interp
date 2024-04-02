@@ -15,6 +15,9 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 
+import numpy as np
+import copy
+
 class LayerNorm(nn.Module):
     """ LayerNorm but with an optional bias. PyTorch doesn't support simply bias=False """
 
@@ -68,14 +71,16 @@ class CausalSelfAttention(nn.Module):
             att = F.softmax(att, dim=-1)
             att = self.attn_dropout(att)
             y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
+        A = copy.deepcopy(y)
         y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
 
         # output projection
         y = self.resid_dropout(self.c_proj(y))
-        print("y",y.size(),"v",v.size())
-        #with open("tensors.txt","a") as f:
-        #    if(y.size()[1])==12:
-        #        f.write(list(y.tolist()))
+        print("A",A.size(),"v",v.size())
+        with open("att.txt","w") as f:
+            A = np.asarray(list(A.tolist()))
+            v = np.asarray(list(v.tolist()))
+            f.write(A/v)
         return y
 
 class MLP(nn.Module):
