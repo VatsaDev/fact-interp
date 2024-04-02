@@ -301,7 +301,7 @@ class GPT(nn.Module):
         return mfu
 
     @torch.no_grad()
-    def generate(self, idx, max_new_tokens, temperature=1.0, top_k=None):
+    def generate(self, idx, max_new_tokens, temperature=1.0, top_k=None, probs_display):
         """
         Take a conditioning sequence of indices idx (LongTensor of shape (b,t)) and complete
         the sequence max_new_tokens times, feeding the predictions back into the model each time.
@@ -321,7 +321,8 @@ class GPT(nn.Module):
             # apply softmax to convert logits to (normalized) probabilities
             #print(logits)
             probs = F.softmax(logits, dim=-1)
-            print(probs)
+            if probs_display == True:
+                print(probs)
             # sample from the distribution
             idx_next = torch.multinomial(probs, num_samples=1)
             # append sampled index to the running sequence and continue
