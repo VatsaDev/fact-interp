@@ -82,7 +82,8 @@ class CausalSelfAttention(nn.Module):
         with open("att.txt","w") as f:
             A = np.asarray(list(A.tolist()))
             v = np.asarray(list(v.tolist()))
-            f.write(str(A/v))
+            M = A/v
+            f.write(str(list(M.tolist())))
             
         return y
 
