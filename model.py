@@ -73,6 +73,7 @@ class CausalSelfAttention(nn.Module):
 
         # output projection
         y = self.resid_dropout(self.c_proj(y))
+        print(y)
         return y
 
 class MLP(nn.Module):
