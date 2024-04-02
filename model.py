@@ -74,6 +74,8 @@ class CausalSelfAttention(nn.Module):
         # output projection
         y = self.resid_dropout(self.c_proj(y))
         print(y.size())
+        with open("tensors.txt","a") as f:
+            f.write(y.tolist())
         return y
 
 class MLP(nn.Module):
