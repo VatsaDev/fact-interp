@@ -74,22 +74,22 @@ class CausalSelfAttention(nn.Module):
         att = F.softmax(att, dim=-1)
         att = self.attn_dropout(att)
 
-        A = copy.deepcopy(att) # get attention tensor
+        # A = copy.deepcopy(att) # get attention tensor, cant copy at training
         
         y = att @ v # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
         y = y.transpose(1, 2).contiguous().view(B, T, C) # re-assemble all head outputs side by side
 
         # output projection
         y = self.resid_dropout(self.c_proj(y))
-        print("A",A.size(),"v",v.size(),"y",y.size())
+        # print("A",A.size(),"v",v.size(),"y",y.size()) # undo comment at inference
 
         # att map, need to actually get the avg of the embedding per tok, then get the attention avg for the tok, then A/V
-        with open("att.txt","w") as f:
-            A = np.asarray(list(A.tolist()))
-            v = np.asarray(list(v.tolist()))
-            M = A/v
-            f.write('')
-            M.tofile(f,",")
+        #with open("att.txt","w") as f:
+        #    A = np.asarray(list(A.tolist()))
+        #    v = np.asarray(list(v.tolist()))
+        #    M = A/v
+        #    f.write('')
+        #    M.tofile(f,",")
             
         return y
 
@@ -339,8 +339,8 @@ class GPT(nn.Module):
             # apply softmax to convert logits to (normalized) probabilities
             #print(logits)
             probs = F.softmax(logits, dim=-1)
-            if probs_display == True:
-                print(probs)
+            #if probs_display == True: debug later
+            #    print(probs)
             # sample from the distribution
             idx_next = torch.multinomial(probs, num_samples=1)
             # append sampled index to the running sequence and continue
